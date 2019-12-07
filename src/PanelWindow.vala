@@ -22,8 +22,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private Widgets.Panel panel;
     private int monitor_number;
-    private int monitor_width;
-    private int monitor_height;
+    private int monitor_width = 500;
+    private int monitor_height =500 ;
     private int monitor_x;
     private int monitor_y;
     private int panel_height;
@@ -79,6 +79,17 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         add (panel);
+
+        GtkLayerShell.init_for_window(this);
+        GtkLayerShell.set_layer (this, GtkLayerShell.Layer.TOP);
+        GtkLayerShell.auto_exclusive_zone_enable(this);
+        /* GtkLayerShell.set_margin(panel_window, GtkLayerShell.Edge.TOP, 20); */
+        GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.TOP, true);
+        GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.LEFT, true);
+        GtkLayerShell.set_anchor(this, GtkLayerShell.Edge.RIGHT, true);
+ 
+ 
+
     }
 
     private bool animation_step () {
@@ -107,10 +118,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_number = screen.get_primary_monitor ();
         Gdk.Rectangle monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
 
-        monitor_width = monitor_dimensions.width;
-        monitor_height = monitor_dimensions.height;
+        /* monitor_width = monitor_dimensions.width; */
+        /* monitor_height = monitor_dimensions.height; */
 
-        this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1));
+        /* this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1)); */
 
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;
@@ -194,13 +205,16 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             Services.BackgroundManager.get_default ().remember_window ();
 
             this.expanded = true;
-            this.set_size_request (monitor_width, monitor_height);
+            /* this.set_size_request (monitor_width, panel_height + 110); */
+            /* GtkLayerShell.set_keyboard_interactivity(this, true); */
         } else if (!expand) {
             Services.BackgroundManager.get_default ().restore_window ();
 
             this.expanded = false;
-            this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-            this.resize (monitor_width, expanded ? monitor_height : 1);
+
+            /* GtkLayerShell.set_keyboard_interactivity(this, false); */
+            /* this.set_size_request (monitor_width, expanded ? monitor_height : -1); */
+            /* this.resize (monitor_width, expanded ? monitor_height : 1); */
         }
     }
 }
